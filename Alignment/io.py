@@ -3,8 +3,6 @@ import glob
 import os
 import numpy as np
 
-sequence_dir = "/Users/Snow/Desktop/BMI203_Algorithm/HW3_due_02_23/sequences"
-
 def read_fasta(fp):
     name, seq = None, []
     for line in fp:
@@ -33,7 +31,7 @@ def get_negpair_seq(dir):
     Output: List of negative pairs sequences
     '''
     files = glob.glob(dir + '/*.fa')
-    negpair_list = open('/Users/Snow/Desktop/BMI203_Algorithm/HW3_due_02_23/Negpairs.txt').read().splitlines()
+    negpair_list = open('/Users/Snow/Desktop/BMI203_Algorithm/HW3_SNaing_2018/Negpairs.txt').read().splitlines()
     neg_files = []
     negpair_sequences = []
     for seq_file in files:
@@ -54,7 +52,7 @@ def get_pospair_seq(dir):
     Output: List of positive pairs sequences
     '''
     files = glob.glob(dir + '/*.fa')
-    pospair_list = open('/Users/Snow/Desktop/BMI203_Algorithm/HW3_due_02_23/Pospairs.txt').read().splitlines()
+    pospair_list = open('/Users/Snow/Desktop/BMI203_Algorithm/HW3_SNaing_2018/Pospairs.txt').read().splitlines()
     pos_files = []
     pospair_sequences = []
     for seq_file in files:
@@ -67,7 +65,3 @@ def get_pospair_seq(dir):
                 pospair_sequences.append(pos_seq)
     print("Read in %d positive pair fasta files" %len(pospair_list))
     return pospair_sequences
-
-get_sequences(sequence_dir)
-get_negpair_seq(sequence_dir)
-get_pospair_seq(sequence_dir)

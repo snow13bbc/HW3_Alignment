@@ -65,3 +65,32 @@ def get_pospair_seq(dir):
                 pospair_sequences.append(pos_seq)
     print("Read in %d positive pair fasta files" %len(pospair_list))
     return pospair_sequences
+
+def read_score_matrix(filename):
+    '''
+    Read score matrices as dataframe.
+    Input: score matrix 
+    Output: dataframe
+    '''
+    with open(filename) as mat:
+        matrix = mat.read()
+        lines = matrix.strip().split('\n')
+        score_matrix = []
+        for line in lines:
+            if not line.startswith("#"):
+                score_matrix.append(line)
+    aas_column = pd.DataFrame(score_matrix[0].strip().split("  "))
+    scores = []
+    for i in range(len(score_matrix)-1):
+        ls = score_matrix[i+1].strip()
+        new = ls.split(" ")
+        sub = []
+        for n in new:
+            if n != "":
+                sub.append(int(n))
+        scores.append(sub)
+        score_df = pd.DataFrame(scores)
+        score_df.columns = score_matrix[0].strip().split("  ")
+    df_score = aas_column.join(score_df)
+    df_score = df_score.set_index([0])
+    return df_score

@@ -1,7 +1,13 @@
-from Bio import SeqIO
-import glob
-import os
 import numpy as np
+import pandas as pd
+import os
+import re
+import glob
+from skbio.alignment import local_pairwise_align, TabularMSA
+from skbio import Protein
+import itertools
+from sklearn.metrics import roc_curve, auc
+import matplotlib.pyplot as plt
 
 def read_fasta(fp):
     name, seq = None, []
@@ -88,13 +94,8 @@ def get_pospair_seq(dir):
     # print("Read in %d positive pair fasta files" %len(pospair2_sequences))
     return pospair_sequences, pospair2_sequences
 
-def read_score_matrix(filename):
-    '''
-    Read score matrices as dataframe.
-    Input: score matrix
-    Output: dataframe
-    '''
-    with open(filename) as mat:
+def read_score_matrix(filepath):
+    with open(filepath) as mat:
         matrix = mat.read()
         lines = matrix.strip().split('\n')
         score_matrix = []
@@ -118,7 +119,7 @@ def read_score_matrix(filename):
     return df_score
 
 def align(seq1, seq2, gap_open_penalty, gap_extend_penalty, score_matrix):
-    #using scikit learn package for local alignment 
+    #using scikit learn package for local alignment
     sequence1 = Protein(seq1)
     sequence2 = Protein(seq2)
     return local_pairwise_align(sequence1, sequence2, gap_open_penalty, gap_extend_penalty, score_matrix)

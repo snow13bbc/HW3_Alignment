@@ -7,7 +7,6 @@ from skbio.alignment import local_pairwise_align, TabularMSA
 from skbio import Protein
 import itertools
 from sklearn.metrics import roc_curve, auc
-import matplotlib.pyplot as plt
 
 def read_fasta(fp):
     name, seq = None, []

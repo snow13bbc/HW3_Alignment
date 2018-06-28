@@ -12,7 +12,7 @@ def test_alignment():
     # update this assertion
     assert score == 333.0
 
-df=pd.read_csv('../matrices_mut/pam100-mut.txt', sep=' ', header=0)
+df=pd.read_csv('matrices_mut/pam100-mut.txt', sep=' ', header=0)
 df = df.set_index('Unnamed: 0')
 
 def test_optimization():

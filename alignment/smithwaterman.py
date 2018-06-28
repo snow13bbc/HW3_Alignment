@@ -1,3 +1,6 @@
+import numpy as np
+import pandas as pd
+
 def align(seq1, seq2, open_penalty, extend_penalty, substitution_matrix):
     '''
     Given two sequences to algin substitution matrix, gap open penalty and

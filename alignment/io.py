@@ -7,6 +7,7 @@ from skbio.alignment import local_pairwise_align, TabularMSA
 from skbio import Protein
 import itertools
 from sklearn.metrics import roc_curve, auc
+import matplotlib.pyplot as plt
 
 def read_fasta(fp):
     name, seq = None, []
@@ -26,17 +27,16 @@ def get_sequences(dir):
         with open(filepath) as fp:
             for name, seq in read_fasta(fp):
                 sequences.append(seq)
-    # print("Read in %d fasta files"%len(files))
+    print("Read in %d fasta files"%len(files))
     return sequences
-
-def get_negpair_seq(dir):
+def get_negpair_seq(filepath, negpairlist_filename):
     '''
     Get sequences for negative pairs.
     Input: Directory for all the sequences
     Output: List of negative pairs sequences
     '''
-    files = glob.glob(dir + '/*.fa')
-    negpair_list = open('/Users/Snow/Desktop/BMI203_Algorithm/HW3_SNaing_2018/Negpairs.txt').read().splitlines()
+    files = glob.glob(filepath + '/*.fa')
+    negpair_list = open(negpairlist_filename).read().splitlines()
     neg_files, neg_files2 = [],[]
     negpair_sequences, negpair2_sequences  = [], []
     for seq_file in files:
@@ -58,21 +58,22 @@ def get_negpair_seq(dir):
     without_x = [s for s in negpair2_sequences if 'x' not in s]
     with_x= [s for s in negpair2_sequences if 'x' in s]
     with_x =' '.join(with_x)
-    with_x = with_x.replace('x', '-')
+    with_x = with_x.replace('x', '*')
     without_x.append(with_x)
     negpair2_sequences = without_x
-    # print("Read in %d negative pair fasta files" %len(negpair_sequences))
-    # print("Read in %d negative pair fasta files" %len(negpair2_sequences))
+
+    print("Read in %d negative pair fasta files" %len(negpair_sequences))
+    print("Read in %d negative pair fasta files" %len(negpair2_sequences))
     return negpair_sequences, negpair2_sequences
 
-def get_pospair_seq(dir):
+def get_pospair_seq(filepath,pospairlist_filename):
     '''
     Get sequences for positive pairs.
     Input: Directory for all the sequences
     Output: List of positive pairs sequences
     '''
-    files = glob.glob(dir + '/*.fa')
-    pospair_list = open('/Users/Snow/Desktop/BMI203_Algorithm/HW3_SNaing_2018/Pospairs.txt').read().splitlines()
+    files = glob.glob(filepath + '/*.fa')
+    pospair_list = open(pospairlist_filename).read().splitlines()
     pos_files,pos2_files = [],[]
     pospair_sequences,pospair2_sequences = [],[]
     for seq_file in files:
@@ -89,8 +90,8 @@ def get_pospair_seq(dir):
         with open(pos_file) as pos:
             for name, pos2_seq in read_fasta(pos):
                 pospair2_sequences.append(pos2_seq)
-    # print("Read in %d positive pair fasta files" %len(pospair_sequences))
-    # print("Read in %d positive pair fasta files" %len(pospair2_sequences))
+    print("Read in %d positive pair fasta files" %len(pospair_sequences))
+    print("Read in %d positive pair fasta files" %len(pospair2_sequences))
     return pospair_sequences, pospair2_sequences
 
 def read_score_matrix(filepath):
@@ -116,9 +117,3 @@ def read_score_matrix(filepath):
     df_score = aas_column.join(score_df)
     df_score = df_score.set_index([0])
     return df_score
-
-def align(seq1, seq2, gap_open_penalty, gap_extend_penalty, score_matrix):
-    #using scikit learn package for local alignment
-    sequence1 = Protein(seq1)
-    sequence2 = Protein(seq2)
-    return local_pairwise_align(sequence1, sequence2, gap_open_penalty, gap_extend_penalty, score_matrix)
